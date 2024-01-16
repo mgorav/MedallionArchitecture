@@ -172,7 +172,7 @@ graph TD
 3. **Configure Unity Catalog**: Set up Unity Catalog in Databricks
 
 ```mermaid
-graph LR
+graph TD
     AWS1(AWS Account 1) -->|Hosts| DB1[Databricks Workspace 1]
     AWS2(AWS Account 2) -->|Hosts| DB2[Databricks Workspace 2]
     AWS3(AWS Account 3) -->|Hosts| DB3[Databricks Workspace 3]
@@ -207,7 +207,7 @@ In a federated AWS environment with multiple Databricks workspaces, it's crucial
 4. Integration with Unity Catalog: IAM policies should align with the Unity Catalog's governance model to manage data access across different workspaces consistently.
 
 ```mermaid
-graph LR
+graph TD
     AWS1(AWS Account 1) -->|Hosts| DB1[Databricks Workspace 1]
     AWS2(AWS Account 2) -->|Hosts| DB2[Databricks Workspace 2]
     AWS3(AWS Account 3) -->|Hosts| DB3[Databricks Workspace 3]
