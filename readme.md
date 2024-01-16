@@ -11,6 +11,12 @@ D --> F[End-Use Applications]
 E --> F
 ```
 
+> NOTE: After reading this paper do read specific reference architecture:
+> 
+> [Medallion Reference Architecture on AWS](aws_reference_architecture.md)
+> 
+> [Medallion Reference Architecture on AWS and Databricks](reference_architecture_aws_databricks.md)
+
 ## Introduction
 
 Contemporary data environments have transitioned from monolithic systems to diversified solutions like cloud services and specialized analytics tools. This diversity, while powerful, often leads to disjointed data ecosystems. The Medallion framework seeks to consolidate these disparate elements into a cohesive Lakehouse architecture, harmonizing various capabilities from raw data processing to sophisticated analytics.
