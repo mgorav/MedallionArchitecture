@@ -445,6 +445,35 @@ graph TB
   BU & SB & M & I & A & H & C & V -.-> MD
 ```
 
+## Summarization on different layers
+
+The Medallion Architecture is a comprehensive framework for modern data management and analytics. It organizes data into distinct layers, each serving a specific purpose in the data lifecycle. Here's a summary of the layers:
+
+1. **Landing Zone:** The Landing Zone is where raw data is initially collected from various sources, such as databases, files, and streaming platforms. It acts as a staging area for data ingestion.
+
+2. **Initial Layer:** In this layer, raw data is stored in an immutable format with a complete history. It preserves the original data schema and serves as a single source of truth.
+
+3. **Intermediate Layer:** Data in the Intermediate Layer is refined, cleansed, and standardized. It establishes clear data models with domains and semantics, and it supports historical data tracking and enrichment.
+
+4. **Integrated Layer:** The Integrated Layer consolidates data from the Intermediate Layer and external sources. It ensures well-governed and accessible data products, including common data models and metrics.
+
+5. **Refined Layer:** The Refined Layer prepares customized datasets for specific applications, applying business logic and optimizations. It tailors data for various use cases and downstream applications.
+
+6. **Integrated/Refined:** Combined data solutions are provided by the Integrated and Refined layers, meeting diverse analytics needs.
+
+This layered approach allows for efficient data processing, robust governance, and flexibility to adapt to evolving data requirements. It integrates with advanced analytics, machine learning, and ensures scalability and performance optimization. The Medallion Architecture is a versatile solution for modern data challenges, promoting data-driven insights and innovation.
+
+| Layer                | Data Processing Stage                  | Mapping |
+|----------------------|---------------------------------------|---------|
+| Landing Zone         | Primary Data Collection                | Gold    |
+| Initial Layer        | Immutable Primary Data Storage         | Silver  |
+| Intermediate Layer   | Data Cleansing and Standardization     | Bronze  |
+| Integrated Layer     | Consolidation of Standardized Data     | Platinum|
+| Refined Layer        | Customized Data Integration            | Diamond |
+| Integrated/Refined   | Combined Data Solutions                | Titanium|
+
+Now, you have a mapping of the Medallion Architecture layers to both their data processing stages and the corresponding "gold," "silver," etc. labels for a concise reference.
+
 ## Incremental Data Replication
 
 - Autoloader for efficient incremental data ingestion
