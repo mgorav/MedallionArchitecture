@@ -19,6 +19,36 @@ E --> F
 > 
 >    - [Reference implementation](reference_implementation.md)
 
+## Table of contents
+
+1. [Introduction](#introduction)
+2. [Mapping to Generic Data Processing Layers](#mapping-to-generic-data-processing-layers)
+3. [Layers of the Medallion Architecture](#layers-of-the-medallion-architecture)
+    1. [Landing Zone](#landing-zone)
+    2. [Initial Layer](#initial-layer)
+    3. [Intermediate Layer](#intermediate-layer)
+    4. [Integrated Layer](#integrated-layer)
+    5. [Refined Layer](#refined-layer)
+    6. [Integrated/Refined](#integratedrefined)
+4. [Schema Management](#schema-management)
+5. [Historization](#historization)
+    1. [Type 2 Historization](#type-2-historization)
+    2. [Type 4 Historization](#type-4-historization)
+6. [Normalization](#normalization)
+7. [Multi-Model Support](#multi-model-support)
+8. [Historization Approaches](#historization-approaches)
+9. [Metadata Management](#metadata-management)
+10. [Tagging Using Ontology](#tagging-using-ontology)
+11. [Refined Layer](#refined-layer-1)
+12. [Summarization on different layers](#summarization-on-different-layers)
+13. [Incremental Data Replication](#incremental-data-replication)
+14. [Data Pipeline Orchestration](#data-pipeline-orchestration)
+15. [Data Governance and Security](#data-governance-and-security)
+16. [Advanced Analytics and Machine Learning Integration](#advanced-analytics-and-machine-learning-integration)
+17. [Scalability and Performance Optimization](#scalability-and-performance-optimization)
+18. [Conclusion](#conclusion)
+
+
 ## Introduction
 
 Contemporary data environments have transitioned from monolithic systems to diversified solutions like cloud services and specialized analytics tools. This diversity, while powerful, often leads to disjointed data ecosystems. The Medallion framework seeks to consolidate these disparate elements into a cohesive Lakehouse architecture, harmonizing various capabilities from raw data processing to sophisticated analytics.
