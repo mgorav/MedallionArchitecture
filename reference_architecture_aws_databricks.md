@@ -2,25 +2,25 @@
 
 1. **[Medallion: AWS and Databricks Integration](#medallion-aws-and-databricks-integration)**
     - [Logical and Conceptual Data Architecture](#logical-and-conceptual-data-architecture)
-        - [Logical Data Flow](#logical-data-flow)
     - [Networking Design](#networking-design)
         - [Networking Details](#networking-details)
+
 2. **[Federated Setup](#federated-setup)**
     - [1. Logical Design](#1-logical-design)
-        - [Logical Design Mermaid Diagram](#logical-design-mermaid-diagram)
     - [2. Conceptual Design](#2-conceptual-design)
-        - [Conceptual Design Mermaid Diagram](#conceptual-design-mermaid-diagram)
     - [3. Network Design](#3-network-design)
-        - [Network Design Mermaid Diagram](#network-design-mermaid-diagram)
     - [Additional Details](#additional-details)
     - [Implementation Steps](#implementation-steps)
+
 3. **[Multiple IAM Policies Setup](#multiple-iam-policies-setup)**
     - [Key Components](#key-components)
+
 4. **[AWS Multi-Region Unity Catalog and RDS Configuration](#aws-multi-region-unity-catalog-and-rds-configuration)**
     - [Key Features](#key-features)
-        - [AWS Multi-Region Architecture Mermaid Diagram](#aws-multi-region-architecture-mermaid-diagram)
     - [AWS Services and IAM Policy Details](#aws-services-and-iam-policy-details)
+
 5. **[Additional Focus Areas](#additional-focus-areas)**
+
 
 ## Medallion: AWS and Databricks Integration
 
