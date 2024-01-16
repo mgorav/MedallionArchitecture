@@ -398,7 +398,7 @@ WHERE {?data dc:subject o:HealthData}
 - **Improved Data Governance**: Facilitates adherence to data policies and standards. Reduces manual governance effort through automated tagging.
 
 ```mermaid
-graph LR
+graph TB
   ST[Structured Tagging] --> SR[Semantic Relationships]
   SR --> HC[Hierarchical Classification]
   HC --> IL[Integration Across Layers]
