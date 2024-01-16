@@ -528,7 +528,7 @@ Within the Medallion architecture, data governance and security are paramount to
 - **Data Masking and Anonymization**: Techniques used in the Refined layer to protect personal and sensitive data, while still allowing for analytical insights.
 
 ```mermaid
-graph LR
+graph TB
   PM[Policy Management] --> DL[Data Lineage]
   DL --> DC[Data Cataloging]
   DC --> ENC[Encryption]
