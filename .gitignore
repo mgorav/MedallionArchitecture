@@ -1,0 +1,5 @@
+# Ignore IntelliJ project files
+.idea/
+
+# Allow tracking .idea directory in local filesystem, but exclude from GitHub
+!.idea/
