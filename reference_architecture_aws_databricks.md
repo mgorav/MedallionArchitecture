@@ -1,23 +1,27 @@
 ## Table of Contents
 
+I apologize for the oversight. Here's the corrected Table of Contents with proper formatting:
+
+## Table of Contents
+
 1. **[Medallion: AWS and Databricks Integration](#medallion-aws-and-databricks-integration)**
-    - [Logical and Conceptual Data Architecture](#logical-and-conceptual-data-architecture)
-    - [Networking Design](#networking-design)
-        - [Networking Details](#networking-details)
+   - [Logical and Conceptual Data Architecture](#logical-and-conceptual-data-architecture)
+   - [Networking Design](#networking-design)
+      - [Networking Details](#networking-details)
 
 2. **[Federated Setup](#federated-setup)**
-    - [1. Logical Design](#1-logical-design)
-    - [2. Conceptual Design](#2-conceptual-design)
-    - [3. Network Design](#3-network-design)
-    - [Additional Details](#additional-details)
-    - [Implementation Steps](#implementation-steps)
+   - [1. Logical Design](#1-logical-design)
+   - [2. Conceptual Design](#2-conceptual-design)
+   - [3. Network Design](#3-network-design)
+   - [Additional Details](#additional-details)
+   - [Implementation Steps](#implementation-steps)
 
 3. **[Multiple IAM Policies Setup](#multiple-iam-policies-setup)**
-    - [Key Components](#key-components)
+   - [Key Components](#key-components)
 
 4. **[AWS Multi-Region Unity Catalog and RDS Configuration](#aws-multi-region-unity-catalog-and-rds-configuration)**
-    - [Key Features](#key-features)
-    - [AWS Services and IAM Policy Details](#aws-services-and-iam-policy-details)
+   - [Key Features](#key-features)
+   - [AWS Services and IAM Policy Details](#aws-services-and-iam-policy-details)
 
 5. **[Additional Focus Areas](#additional-focus-areas)**
 
