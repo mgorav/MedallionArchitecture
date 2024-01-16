@@ -1,26 +1,26 @@
 ## Table of Contents
 
-1. [Medallion: AWS and Databricks Integration](#medallion-aws-and-databricks-integration)
+1. **[Medallion: AWS and Databricks Integration](#medallion-aws-and-databricks-integration)**
     - [Logical and Conceptual Data Architecture](#logical-and-conceptual-data-architecture)
         - [Logical Data Flow](#logical-data-flow)
     - [Networking Design](#networking-design)
         - [Networking Details](#networking-details)
-2. [Federated Setup](#federated-setup)
+2. **[Federated Setup](#federated-setup)**
     - [1. Logical Design](#1-logical-design)
-        - [Mermaid Diagram for Logical Design](#mermaid-diagram-for-logical-design)
+        - [Logical Design Mermaid Diagram](#logical-design-mermaid-diagram)
     - [2. Conceptual Design](#2-conceptual-design)
-        - [Mermaid Diagram for Conceptual Design](#mermaid-diagram-for-conceptual-design)
+        - [Conceptual Design Mermaid Diagram](#conceptual-design-mermaid-diagram)
     - [3. Network Design](#3-network-design)
-        - [Mermaid Diagram for Network Design](#mermaid-diagram-for-network-design)
+        - [Network Design Mermaid Diagram](#network-design-mermaid-diagram)
     - [Additional Details](#additional-details)
     - [Implementation Steps](#implementation-steps)
-3. [Multiple IAM Policies Setup](#multiple-iam-policies-setup)
+3. **[Multiple IAM Policies Setup](#multiple-iam-policies-setup)**
     - [Key Components](#key-components)
-4. [AWS Multi-Region Unity Catalog and RDS Configuration](#aws-multi-region-unity-catalog-and-rds-configuration)
+4. **[AWS Multi-Region Unity Catalog and RDS Configuration](#aws-multi-region-unity-catalog-and-rds-configuration)**
     - [Key Features](#key-features)
-        - [Mermaid Diagram: AWS Multi-Region Architecture](#mermaid-diagram-aws-multi-region-architecture)
+        - [AWS Multi-Region Architecture Mermaid Diagram](#aws-multi-region-architecture-mermaid-diagram)
     - [AWS Services and IAM Policy Details](#aws-services-and-iam-policy-details)
-5. [Additional Focus Areas](#additional-focus-areas)
+5. **[Additional Focus Areas](#additional-focus-areas)**
 
 ## Medallion: AWS and Databricks Integration
 
@@ -104,7 +104,7 @@ The Medallion architecture offers a seamless and secure data processing solution
 
 ## Federated Setup
 
-Creating a detailed guide for setting up a federated AWS cross-account setup using multiple Databricks workspaces, along with the implementation of Unity Catalog, involves several intricate steps. This guide will be structured into three main sections: logical design, conceptual design, and network design, with each section containing a Mermaid diagram for visual representation.
+Creating a detailed guide for setting up a federated AWS cross-account setup using multiple Databricks workspaces, along with the implementation of Unity Catalog, involves several intricate steps. This guide will be structured into three main sections: logical design, conceptual design, and network design, with each section containing a diagram for visual representation.
 
 ### 1. Logical Design
 
@@ -114,7 +114,7 @@ The logical design will outline the architecture and the components involved in 
 - **Databricks Workspaces**: These are set up in each AWS account, allowing for data processing and analytics.
 - **Unity Catalog**: A unified data management system that provides a consistent view of data across different Databricks workspaces.
 
-#### Mermaid Diagram for Logical Design
+#### Logical Design
 ```mermaid
 graph LR
     A[AWS Account 1] -->|Databricks Workspace| B((DB Workspace 1))
@@ -149,7 +149,7 @@ The network design will cover the connectivity and security aspects:
 - **VPC Peering or Transit Gateway**: To connect different AWS accounts and their resources.
 - **Security Groups and Network ACLs**: For managing network traffic and access control.
 
-#### Mermaid Diagram for Network Design
+#### Network Design
 ```mermaid
 graph TD
     A[AWS Account 1 VPC] -->|Peering/Transit Gateway| B[AWS Account 2 VPC]
@@ -249,7 +249,7 @@ Deploying a multi-region Unity Catalog on AWS with integrated Amazon RDS aims to
 
 3. **Regulatory Compliance Across Regions**: Aligning data storage and processing with the regional legal requirements to ensure compliance.
 
-#### Mermaid Diagram: AWS Multi-Region Architecture
+#### AWS Multi-Region Architecture
 
 ```mermaid
 graph TD
