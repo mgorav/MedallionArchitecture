@@ -551,7 +551,7 @@ The Medallion architecture seamlessly integrates advanced analytics and machine 
 - **Real-Time Analytics**: Leveraging streaming data capabilities for real-time insights and decision-making.
 
 ```mermaid
-graph LR
+graph TB
   MDT[Model Development & Training] --> MD[Model Deployment]
   MD --> MM[Model Monitoring]
   MM --> BI[Self-Service BI Tools]
@@ -573,7 +573,7 @@ To handle growing data volumes and complex analytics workloads, the Medallion ar
 - **Query Optimization**: Advanced algorithms for optimizing data retrieval and processing tasks.
 
 ```mermaid
-graph LR
+graph TB
   EC[Elastic Computing] --> DP[Distributed Processing]
   DP --> DC[Data Caching]
   DC --> QO[Query Optimization]
