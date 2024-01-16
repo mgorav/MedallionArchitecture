@@ -2,29 +2,27 @@
 
 ```mermaid
 graph TD
-L(External Systems) --> A[Landing Area]
-A --> B[Bronze Layer]
-B --> C[Silver Layer]
-C --> D[Curated Layer]
-C --> E[Gold Layer]
-D --> F[Applications]  
+L(External Sources) --> A[Landing Zone]
+A --> B[Initial Layer]
+B --> C[Intermediate Layer]
+C --> D[Integrated Layer]
+C --> E[Refined Layer]
+D --> F[End-Use Applications]  
 E --> F
 ```
 
 ## Introduction
 
-Data infrastructure has evolved from running Spark workloads on Kubernetes to leveraging services like Amazon EMR and traditional BI tools for analytics. However, this piecemeal approach has created fragmented data silos. Seeks to build a unified Lakehouse architecture using Medallion that can bring together the best capabilities across these environments.
+Contemporary data environments have transitioned from monolithic systems to diversified solutions like cloud services and specialized analytics tools. This diversity, while powerful, often leads to disjointed data ecosystems. The Medallion framework seeks to consolidate these disparate elements into a cohesive Lakehouse architecture, harmonizing various capabilities from raw data processing to sophisticated analytics.
 
+Medallion outlines a method for structuring and managing data pipelines, encompassing everything from raw data handling in cloud environments to refined data utilization in analytics platforms. It emphasizes uniform data structures, efficient schema management, robust governance, and facilitates the transition of analytics workflows from raw data processing to advanced BI tools.
 
-The Medallion blueprint provides a way to orchestrate and manage data pipelines from raw data processed in Spark on EMR, to curated datasets accessed from BI tools like Tableau for reporting. Medallion establishes common data models, schema management, governance and enables easier migration of analytics from Spark ML workloads to BI tools.
-
-
-This whitepaper covers how Medallion's layered architecture can help transition from current generation big data tools to a next-generation Lakehouse. We detail considerations around metadata management, security, pipeline orchestration and compatibility across Spark, EMR and BI tools like Tableau. The Medallion architecture will provide a modern and flexible data analytics platform to meet emerging business needs.
+This white paper delves into the layered structure of the Medallion architecture, highlighting its role in transforming modern big data tools into a comprehensive Lakehouse system. We discuss key aspects like metadata management, security, pipeline coordination, and compatibility with various technologies including cloud data services and BI platforms. Medallion represents a progressive, adaptable solution for contemporary data analytics challenges.
 
 ```mermaid
 graph LR
 subgraph Before
-K8S & EMR & BI
+Cloud & Analytics & BI
 end
 subgraph Issues
 Fragments[(Data Silos)]  
@@ -35,339 +33,168 @@ end
 BI --- M
 ```
 
-## Mapping to Traditional Data Processing Layers
+## Mapping to Generic Data Processing Layers
 
-The Medallion architecture consists of layers that correspond to traditional data processing needs:
+The Medallion architecture is composed of distinct layers, each correlating to conventional data processing stages:
 
-- Landing Area: Raw data ingestion
-- Bronze Layer: Immutable raw data
-- Silver Layer: Cleansed and validated data
-- Curated Layer: Authoritative shared data assets
-- Gold Layer: Tailored integrated data
-- Gold/Curated: Aggregated data products
+- Landing Zone: Primary data collection
+- Initial Layer: Immutable primary data storage
+- Intermediate Layer: Data cleansing and standardization
+- Integrated Layer: Consolidation of standardized data
+- Refined Layer: Customized data integration
+- Integrated/Refined: Combined data solutions
 
-This demonstrates how Medallion maps to common data engineering steps in a modular fashion. Next we dive deeper into the capabilities of each layer.
+These layers demonstrate how Medallion modularly aligns with standard data engineering processes. Next, we explore the functionality of each layer.
 
 ```mermaid
 graph TD
-A[Raw Ingestion] --> B[Immutable <br> Raw Data]
-B --> C[Cleansed <br> Validated Data] 
-C --> D[Authoritative <br> Shared Assets]  
-C --> E[Tailored <br> Integrated Data]
-D -.-> F[Aggregated <br> Data Products]
+A[Data Collection] --> B[Immutable <br> Primary Data]
+B --> C[Standardized <br> Data] 
+C --> D[Consolidated <br> Data Assets]  
+C --> E[Customized <br> Data Integration]
+D -.-> F[Combined <br> Data Solutions]
 E -.-> F
 ```
 
 
 ## Layers of the Medallion Architecture
 
-The below diagram illustrates how data flows through the layers of the Medallion architecture. It starts with data ingestion from external systems into a Landing Area, which acts as a staging layer.
+The following diagram illustrates the data flow through Medallion's layers, starting with the ingestion of external data into the Landing Zone, serving as the initial data staging area.
 
+Raw data is loaded into the Initial layer, maintaining an unaltered record of received data. The Intermediate layer processes this raw data into cleansed and standardized datasets. The Integrated layer then amalgamates data from the Intermediate layer into consolidated data assets.
 
-Raw data is then loaded into the Bronze layer, which serves as an immutable store of the data exactly as it was received. The Silver layer refines the raw data into curated and validated datasets. The Curated layer combines data from Silver into authoritative shared data assets.
+The Refined layer tailors datasets for specific applications and use cases. Both Integrated and Refined layers supply high-quality data solutions to downstream applications and analytics workflows.
 
-
-The Gold layer prepares tailored datasets for specific use cases and applications. Both the Curated and Gold layers provide integrated, high quality data products to downstream applications and analytics workloads.
-
-
-This layered data pipeline enables decoupling of the raw data ingestion from the refined datasets that get served to consumers. It also allows reuse of common data across the organization via the Curated layer, while still enabling custom views in Gold for particular use cases. The architecture supports good data governance through its use of progressively refined and integrated data sets.
+This layered pipeline allows for separation of raw data collection from the refined data provided to end-users. It promotes the reuse of standardized data across the organization through the Integrated layer, while the Refined layer offers tailored solutions for specific needs. The architecture supports effective data governance with progressively refined and integrated datasets.
 
 ```mermaid
 graph LR
-L[(External <br> Systems)] --> A(Landing <br> Area)  
-A --> B{Bronze <br> Layer}
-B --> C{Silver <br> Layer}  
-C --> D{Curated <br> Layer}
-C --> E{Gold <br> Layer} 
-D & E --> F([Applications])
+L[(External <br> Sources)] --> A[Landing <br> Zone]  
+A --> B{Initial <br> Layer}
+B --> C{Intermediate <br> Layer}  
+C --> D{Integrated <br> Layer}
+C --> E{Refined <br> Layer} 
+D & E --> F([End-Use Applications])
 ```
 
-### Landing Area
+### Landing Zone
 
-The Landing Area provides a flexible staging layer to ingest data from diverse sources like databases, files, streams, IoT devices, and more. Data is consolidated here in its true raw format before transformation. This area serves as a buffer and collection point for data before loading into the Bronze layer. Key features include:
+The Landing Zone is a versatile staging area designed for data ingestion from varied sources like databases, file systems, streaming platforms, IoT devices, and others. Here, data is gathered in its raw form prior to any transformation, serving as a preliminary collection and buffering stage before moving to the Initial layer. Key features include:
 
-- Schema-on-read approach - store data in original schema
-- Native formats - CSV, JSON, parquet, AVRO, etc.
-- Batch or streaming ingestion
-- Integration layer for diverse data
-- Optional data quarantine for validation
-- Transient storage before Bronze
+- Schema-on-read capability: retaining original data schema
+- Support for various data formats: CSV, JSON, Parquet, AVRO, etc.
+- Capabilities for both batch and streaming data ingestion
+- Integration point for diverse data sources
+- Optional data validation and quarantine processes
+- Transitory storage before moving to the Initial layer
 
 ```mermaid
 graph LR 
-subgraph Sources
+subgraph Data Sources
 DB[Databases]
 F[Files]
 S[Streams] 
-I(IoT)
+I[IoT Devices]
 end
-COL[(Consolidation)]
-V[(Validation)]
-B{Bronze Layer} 
+COL[(Data Consolidation)]
+V[(Data Validation)]
+I{Initial Layer} 
 
 DB & F & S & I -.-> COL
 COL --> V 
-V -.-> B
+V -.-> I
 ```
 
-### Bronze Layer
+### Initial Layer
 
-The Bronze layer acts as the immutable store for raw data across the organization. It retains full history and provides a single source of truth. Key aspects include:
+The Initial layer serves as the immutable repository for raw data within the organization, preserving a complete history and functioning as a single source of truth. Its main characteristics include:
 
-- Immutable storage of raw data as-is
-- Full auditable history with timestamping
-- Schema changes automatically tracked
-- Partitioning organized by ingestion time
-- No transformation or business logic
-- Data parsing/validation for downstream processing
-- Store in performant formats like Parquet
+- Immutable storage of raw data in its original form
+- Comprehensive and auditable history with timestamping
+- Automatic tracking of schema changes
+- Organized partitioning by data ingestion time
+- Absence of transformation or business logic
+- Data parsing and validation for subsequent processing stages
+- Efficient data storage formats like Parquet
 
 ```mermaid
 graph TB
-    I[Input] --> R{Raw <br/> Datastore}
+    I[Input Data] --> R{Raw <br/> Data Storage}
     R --> P[Partitioned <br/> by Ingestion Time]
-    R --> F[Full <br/> History]
-    R --> A[Auditable <br/> via Timestamps]
+    R --> F[Complete <br/> History]
+    R --> A[Auditable <br/> with Timestamps]
     R --> T[Tracked <br/> Schema Changes]
     R --> N[No Transformation <br/> or Business Logic]
     R --> V[Data Validation <br/> for Downstream]
-    R --> PF[Performant Formats <br/> Parquet]
+    R --> PF[Efficient Formats <br/> like Parquet]
 ```
 
-### Silver Layer
+### Intermediate Layer
 
-The Silver layer refines raw data from Bronze into curated, high-quality datasets for downstream analytics and operations. It prepares shareable, trusted data products. Capabilities include:
+The Intermediate layer is where raw data from the Initial layer is refined into high-quality, shareable datasets for downstream analytics and operational purposes. This layer is responsible for:
 
 - Data cleansing, validation, and filtering
-- Data modeling with domains and semantics
-- Type 2 historization for temporal tracking
-- Master data management and conformed dimensions
-- Data enrichment and reference data joins
-- Materialized derived datasets, aggregates, and cubes
-- Business metadata and glossary
-
-
+- Establishing data models with clear domains and semantics
+- Type 2 historization for temporal data tracking
+- Management of master data and conformed dimensions
+- Data enrichment through reference data joins
+- Creation of materialized datasets, aggregates, and data cubes
+- Development of a business metadata repository and glossary
 
 ```mermaid
 graph LR
-B(Bronze Layer) --> C{Silver Layer}
+I(Initial Layer) --> C{Intermediate Layer}
 subgraph Functions  
 V[Cleanse & Validate]
 M[Model & Standardize]  
-H[Historization]
+H[Historize Data]
 D[Conform Dimensions]
 E[Enrichment Joins] 
-A[Aggregations & Cubes]
+A[Aggregations & Data Cubes]
 G[Business Glossary]
 end
 ```
 
-### Curated Layer
+### Integrated Layer
 
-The Curated layer combines integrated data from Silver along with external sources into well-governed data products for broad enterprise consumption. Key functionalities:
+The Integrated layer aggregates and refines the standardized data from the Intermediate layer, along with data from external sources, into well-governed and broadly accessible data products. Its primary functions include:
 
-- Blends multiple Silver data sources
-- Certification and trust indicators on data
-- Managing data access and usage policies
-- Business glossary and definitions
-- Common models, metrics, and KPIs
-- Master data and reference data management
-- Third-party and external data integration
+- Merging various data sources from the Intermediate layer
+- Data certification and trust indicators
+- Management of data access and utilization policies
+- Establishment of a business glossary and clear definitions
+- Creation of common data models, metrics, and KPIs
+- Incorporation of master and reference data management
+- Integration with third-party and external data sources
 
 ```mermaid
 graph LR
-SI[Silver Data Sources] -.-> BL(Blending)
+SI[Intermediate Data Sources] -.-> BL(Data Blending)
 BL --> CG[Certification & Governance]
 SI --> MD[Master & Reference Data] 
-EXT[(External Data)] -.-> BL
+EXT[(External Data Sources)] -.-> BL
 CG --> DM[Data Models]  
 CG --> MD
 DM & MD --> DA[Downstream Applications]
 ```
 
-## Data Contracts
-
-A key concern in building a coherent Lakehouse architecture is establishing trust and shared understanding between data producers and consumers. The Data Mesh paradigm advocates the use of "data contracts" to align capabilities and expectations.
-
-
-Data contracts formalize the agreement between data teams on aspects like:
-
-- Data schemas, models, formats
-- Update frequencies, SLAs
-- Data quality metrics, validations
-- Business metadata and definitions
-- Data governance policies
-
-
-In the Medallion architecture, data contracts play an important role in bridging the Curated and Gold layers. The Curated zone acts as the source of truth and core data products. Data contracts allow this zone to provide self-service access to downstream consumers in Gold, while maintaining governed data assets.
-
-
-For example, the customer data contract establishes the schema, semantics, SLAs, and access policies for customer data curated in the Curated layer. Any applications consuming this data through the Gold layer can onboard to this contract, relying on its consistency and quality guarantees.
-
-
-Data contracts enable decoupling teams across the Lakehouse by aligning capabilities through well-defined technical and business agreements. This facilitates reuse, self-service access and agility across the organization.
-
-
-```mermaid
-graph LR
-    subgraph Curated
-        C[Source of Truth<br/>Core Data Products]
-    end
-    subgraph Gold
-        A[Self-Service<br/>Custom Preparation]
-    end
-    C --> DC{Data Contracts}
-    DC --> A
-```
-
-### Gold Layer
-
-The Gold layer prepares tailored datasets for specific applications, users, and consumption use cases. It applies final transformations and business logic. Features include:
-
-- Business user self-service preparation
-- Data sandboxes for knowledge workers/analysts
-- Data masking for PII protection
-- Integration across siloed systems
-- Aggregation, rollups, and hypercubes
-- Caching for performance optimization
-- Custom views and schemas for consumers
-- Metadata-driven automation and reuse
-
-| Medallion Layer | Technologies | Description |
-|-|-|-|
-| Landing Area | AWS S3 | S3 for landing raw data |  
-| Bronze | Delta Lake on Databricks | Immutable raw data stored in Delta Lake |
-| Silver | Spark SQL on Databricks | Data transformation using Spark SQL |
-| Curated | Unity Catalog | Business glossary, lineage, governance |
-| Gold | SQL Analytics on Databricks | Aggregates and dashboards for BI tools |
-
-
-```mermaid
-graph TB 
-  subgraph Prep Services  
-  BU[Business User <br/> Self-Service Prep]
-  SB[Sandboxes for <br/> Knowledge Workers]
-  M[Data Masking for <br/> PII Protection]
-  I[Integration Across <br/> Systems]
-  end
-  
-  subgraph Delivery
-  A[Aggregations <br/> & Rollups] 
-  H[Hypercubes]
-  C[Caching for <br/> Performance]  
-  V[Custom Views <br/> & Schemas]
-  end
-  
-  subgraph Automation
-  MD[Metadata-driven <br/> Automation & Reuse]
-  end
-  
-  BU & SB & M & I & A & H & C & V -.-> MD
-```
-
-### Incremental data replication
-
-- Autoloader for incremental data ingestion
-
-```mermaid
-
-graph TB
-WF[Workflow Scheduling] --> PE[Processing Engine]  
-PE --> IP[Incremental Processing]
-IP --> DO[Dynamic Optimization]    
-IP --> LT[Lineage Tracking]
-LT -.-> EI[Environment Isolation]  
-EI -.-> CD[CI/CD Pipelines]
-CD --> SM[SLA Monitoring]
-```
-
-## Data Pipeline Orchestration
-
-Moving data across the Medallion layers requires careful orchestration using workflow schedulers, distributed processing, and DevOps practices:
-
-### Workflow Scheduling
-
-- Tools like Apache Airflow/Brickflow to define and orchestrate pipelines
-- Environmental isolation - dev, test, prod
-- CI/CD principles applied to data
-- SLA monitoring and alerting
-- Lineage tracking across workflow steps
-
-### Processing Engines
-
-- Leveraging execution engines like Spark, Flink for distributed processing
-
-### Incremental Processing
-
-Delta Lake enables efficient incremental processing through change data capture and management of table snapshots. Key features include:
-
-- **Change Data Capture** - Delta Lake uses transaction log to track record inserts, updates and deletes. This change set can be processed incrementally.
-- **Upsert Updates** - The MERGE INTO syntax in Delta Lake allows atomically updating or inserting records based on a condition. This handles change data seamlessly.
-- **Time Travel** - Table snapshots allow queries as of a point in time. Incremental jobs can access previous snapshot states.
-- **Stream Processing** - Streaming data can be incrementally appended to Delta tables using streaming writes.
-- **Automated Pipeline Updates** - Table schema changes trigger re-generation of incremental pipelines to adapt to updates.
-- **Partition Management** - Time-based partitions can be used to limit incremental processing to new partitions.
-- **Optimized Log Retention** - Old transaction log data can be automatically pruned to reduce storage overhead.
-- **Job Idempotency** - Incremental jobs are idempotent and can be safely re-run on the same input data.
-
-
-By leveraging these Delta Lake features, Databricks enables building efficient and fault-tolerant incremental ETL pipelines that maximize performance on growing data volumes. The unified batch and streaming processing model provides flexibility.
-
-Pipeline Task | Databricks Offering | Description
--|-|-
-Workflow Scheduling | Pipelines | Orchestrate end-to-end data pipelines and workflows
-Processing Engine | Spark Cluster | Leverage scalable Spark processing for ETL data tasks  
-Incremental Processing | Delta Lake | Delta Lake change data capture enables incremental ETL
-Dynamic Optimization | Auto-scaling | Automatically scale Spark clusters to optimize processing  
-Lineage Tracking | Unity Catalog | Unity Catalog captures lineage across pipelines
-Environment Isolation | Workspaces | Workspaces provide dev, test, prod environment isolation  
-CI/CD | CI/CD Pipelines | Deploy code changes through CI/CD pipelines
-SLA Monitoring | Job Monitoring | Monitor job metrics and SLAs on pipeline runs  
-
-- **Workflow Scheduling**: Pipelines provide workflow scheduling and orchestration capabilities to build and manage data pipelines.
-- **Processing Engine**: Spark clusters supply distributed data processing engine leveraging DataFrame/Dataset APIs.
-- **Incremental Processing**: Delta Lake change data capture powers incremental ETL processing.
-- **Dynamic Optimization**: Auto-scaling feature automatically scales clusters up/down to meet processing demands.
-- **Lineage Tracking**: Unity Catalog captures metadata and lineage information across pipelines.
-- **Environment Isolation**: Workspaces allow creating isolated environments for dev, test, production.
-- **CI/CD**: CI/CD pipelines enable continuous integration and deployment of code changes.
-- **SLA Monitoring**: Advanced job monitoring provides insights into job metrics, SLAs and pipeline health.
-
-This demonstrates how Medallion can enable varied analytics use cases with data to drive business insights.
 ## Schema Management
 
-Managing schemas for analytical datasets requires careful consideration as source data schemas evolve. Delta Lake provides several key capabilities:
+Effective schema management is crucial for maintaining and utilizing analytical datasets, particularly as source data schemas evolve. Within the Medallion architecture, several strategies and tools are employed to handle schema management effectively:
 
-- **Schema Evolution** - Delta Lake allows schema changes via DDL alter table commands. New columns can be directly added.
-- **Schema on Read** - Queries can project only required columns ignoring schema changes. New data gets automatically serialized.
-- **Column Metadata** - Column metadata like comment, description and data type is preserved even across schema changes.
-- **Schema Enforcement** - Schema validation ensures compliance during dataframe writes to the Delta table.
-- **Merge Schema** - Schemas can be merged during dataframe writes keeping common columns intact.
-- **Time Travel** - Table snapshots allow reconstructing schema at any historical point in time.
-- **Schema Drift Metrics** - Dasbhoards track schema differences across table versions to detect drift.
-- **Schema Change Alerts** - Alerts can be configured to trigger based on the threshold of schema differences.
-- **Multi-format Support** - Open formats like Parquet, JSON, AVRO provide schema flexibility and interoperability.
+- **Schema Evolution**: Allows for seamless modifications to the schema, such as adding new columns, using DDL alter table commands in Delta Lake.
+- **Schema on Read**: Facilitates query execution even with evolving schemas by projecting only the required columns, ensuring new data fits within the existing schema.
+- **Column Metadata**: Ensures that details like column descriptions, data types, and other metadata are maintained across schema changes.
+- **Schema Enforcement**: Validates compliance with the predefined schema during data writes to Delta tables.
+- **Merge Schema**: Permits the merging of schemas during data writes, maintaining the integrity of common columns.
+- **Time Travel**: Provides the capability to reconstruct table schemas as of any historical point, offering insights into data evolution.
+- **Schema Drift Metrics**: Tracks and visualizes schema differences over time to identify and manage schema drift.
+- **Schema Change Alerts**: Configurable notifications for significant schema changes, aiding in proactive data management.
+- **Multi-format Support**: Accommodates a variety of open storage formats like Parquet, JSON, and AVRO, ensuring schema flexibility and interoperability.
 
-By leveraging Delta Lake, Databricks provides robust schema management capabilities like evolution, time-travel and drift detection that address key schema challenges in building a Lakehouse architecture.
-
-With data from disparate sources, schema management is a key consideration for Medallion:
-
-- **Schema Evolution**
-    - Bronze holds immutable raw data as schema changes upstream
-    - In the Bronze layer, Delta Lake tables store raw immutable data as-is without applying schema transformations. This ensures historical data is never changed even as upstream source schemas get updated. New columns added to sources will be automatically available in Bronze.
-
-- **Type 2 tracking in Silver retains history of schema changes**
-    - The Silver layer leverages Type 2 tracking in Delta Lake to manage schema changes with time travel. Altering Silver table schema adds new columns with metadata while retaining historical data intact. Queries can reconstruct schema at any historical point.
-
-- **Gold can reconstruct schemas and views on read**
-    - In the Gold layer, schemas can be evolved by directly altering tables. But downstream views and aggregations designed for specific consumers can reconstruct required schema on read by projecting only essential columns. This prevents changes in Gold schemas from affecting downstream usage.
-
-- **Metadata management tracks schema changes across pipelines**
-    - Unity Catalog captures metadata like table schemas, columns and data types as they evolve across Bronze, Silver and Gold. Data discovery, lineage and impact analysis can leverage this metadata to understand schema changes across layers.
-
+By leveraging these features, particularly within Delta Lake, the Medallion architecture provides robust schema management capabilities. This addresses key challenges associated with managing schemas in a Lakehouse architecture, facilitating data consistency and reliability across the data lifecycle.
 
 ```mermaid
-
 graph TB
 
   SE[Schema Evolution] --> SR[Schema on Read]
@@ -382,31 +209,32 @@ graph TB
 
 ## Historization
 
-Type 2 uses start/end dating within same table  
-Delta Lake supports Type 2 historization using time travel capabilities. Records can have start and end timestamp columns added. New inserts/updates get new time ranges, while old rows remain intact allowing time-series analysis.
+Historization within the Medallion architecture refers to the strategies for managing historical data and its evolution over time. Key approaches include:
 
-Type 4 splits current and historical data into separate tables  
-For Type 4 historization, current data can stay in the main Delta table. Historical snapshots can be written to separate 'history' tables using DataFrame APIs at batch intervals.
+### Type 2 Historization
 
-Optimized based on data volume, query patterns  
-Type 2 avoids major size increases but may impact main table performance. Type 4 reduces current table size but incurs join costs for historical analysis. Choice can be optimized based on data volumes, query patterns and cost.
+- Implemented using start and end dates within the same table.
+- Delta Lake's time travel capabilities are utilized to manage start and end timestamps for records, enabling the analysis of data over time.
+- New inserts and updates are timestamped accordingly, while historical data remains unaltered.
 
-Retain full audit trail of changes  
-Delta Lake transaction log and time travel provides a full audit history of all changes. Historical snapshots also capture the table state at a point in time. This provides a complete audit trail under both models.
+### Type 4 Historization
 
-Delta Lake thus provides flexibility to implement both Type 2 and Type 4 historization models, while retaining transaction history and ability to time travel. The Lakehouse architecture can leverage the optimal approach based on the dataset and use case.
+- Involves splitting current and historical data into separate tables.
+- The current data resides in the main Delta table, while historical data snapshots are maintained in separate 'history' tables.
+- This approach is optimized based on data volumes, query patterns, and performance considerations.
+
+Both Type 2 and Type 4 historization methods are supported, allowing for a comprehensive audit trail of data changes and the ability to reproduce historical states of data. The choice of method depends on specific data requirements and use cases within the Lakehouse architecture.
 
 ```mermaid
-
 graph TB
 
   subgraph Type 2
-  T2[Within Same Table]
+  T2[Same Table Historization]
   T2 --> D[Date Attributes]
   end
   
   subgraph Type 4
-  T4[Split Current and History]
+  T4[Separate Current & History]
   T4 --> SH[Separate History Table]  
   end
   
@@ -415,82 +243,94 @@ graph TB
 
 ## Normalization
 
-- **Silver serves as the normalization layer, conformed dimensions**
-    - The Silver layer in Delta Lake is ideal for normalization since it curates the authoritative data. Normalized entities like customers, products, inventory can be built here with properly conformed dimensions.
+In the Medallion architecture, data normalization is a critical process, particularly within the Intermediate layer:
 
-- **Gold can denormalize into schema specific for downstream usage**
-    - While Silver maintains normalized data, the Gold layer can reshape data into denormalized models best suited for different consumer needs. This avoids joins and provides query-optimized schema.
+- **Intermediate Layer for Normalization**: This layer focuses on establishing conformed dimensions and normalized entities, such as customer and product data.
+- **Refined Layer for Denormalization**: While the Intermediate layer maintains normalized data, the Refined layer adapts this data into denormalized models to meet specific consumer requirements, optimizing query performance.
+- **Multi-model Support**: Delta Lake supports various data models, including relational, graph, and document models, allowing for the selection of the most appropriate structure based on data access patterns.
 
-- **Multi-model support - relational, graph, doc, columnar**
-    - Delta Lake provides kernels for relational, graph and document data models. This allows leveraging the right structure based on access patterns. Columnar storage optimizes analytic workloads.
-
-  For example, user profiles in Silver may be in relational normalized form. In Gold, a graph model can capture profile-product affinity for recommendations, while a columnar format speeds up analytics.
-
-  By leveraging Delta Lake's multi-model capabilities, the Lakehouse can harmonize analytics using the optimal data model per downstream use case while maintaining normalized Silver datasets.
+For instance, user profiles might be stored in a normalized relational format in the Intermediate layer, but in the Refined layer, they could be structured as a graph model for recommendation engines or in a columnar format for analytics.
 
 ```mermaid
-
 graph TB
 
-  S[Silver Layer <br> Conformed Dimensions]
-  S --> N[Normalized Entities]
+  I[Intermediate Layer <br> Conformed Dimensions]
+  I --> N[Normalized Entities]
   
-  G[Gold Layer]
-  G --> D[Denormalized for Consumers] 
+  R[Refined Layer]
+  R --> D[Denormalized for Consumers] 
   
   N & D --> MM[Multi-Model Support]
 ```
 
 ## Multi-Model Support
 
-Delta Lake supports multiple data models and storage formats to fit various performance and analysis needs:
+Delta Lake's support for multiple data models and storage formats caters to various performance and analytical needs within the Medallion architecture:
 
-- **Relational Model** - Delta Lake supports traditional relational constructs like tables, foreign keys, and SQL for analysis. Normalized data can be stored relationally.
-- **Graph Model** - Delta Lake integrates with graph frameworks like GraphFrames to store connected data and run graph algorithms. This is useful for recommendations, network analysis, etc.
-- **Document Model** - Delta Lake can natively store semi-structured JSON data, useful for clickstream, IoT and other schema-less data.
-- **Columnar Storage** - Data is stored columnarly in Parquet format for query optimization. This speeds up large analytic queries.
+- **Relational Model**: Supports traditional relational structures and SQL for analysis, ideal for storing normalized data.
+- **Graph Model**: Integrates with graph processing frameworks for connected data analysis, suitable for use cases like network analysis or recommendation systems.
+- **Document Model**: Capable of handling semi-structured data like JSON, which is useful for diverse data types like clickstreams or IoT data.
+- **Columnar Storage**: Optimizes analytic queries through Parquet format storage, enhancing query performance for large datasets.
 
-The Lakehouse leverages this flexibility to optimize storage and access patterns:
+This multi-model support allows Medallion to tailor data management to specific use cases while maintaining a consistent data lake through the
 
-- Silver may use a relational model for easy normalization.
-- Gold can denormalize into a graph or document structure matching downstream needs.
-- Bronze and Silver use columnar formats like Parquet for query efficiency.
-- New data sources like IoT events can be ingested in JSON document model.
+unified Delta Lake format. It provides the flexibility to optimize storage and access patterns based on the specific requirements of each data layer:
 
-This multi-model support allows tailoring data management to the specific use case while maintaining compatibility through the unified Delta Lake format. It provides flexibility within a consistent data lake.
+- In the Intermediate layer, a relational model might be employed for ease of normalization.
+- The Refined layer could leverage graph or document structures to match specific downstream application needs.
+- For efficient query performance, both the Initial and Intermediate layers might use columnar formats like Parquet.
+- New data types, such as IoT event streams, could be ingested using a document model in JSON format.
+
+This approach ensures that each layer of the Medallion architecture can effectively manage and utilize data according to its specific role and objectives, while maintaining overall compatibility and coherence within the Lakehouse framework.
 
 ## Historization Approaches
 
-A key aspect of managing data evolution and history in Medallion is the historization approach. There are two main techniques:
+Historization is a key aspect of managing data evolution and history in the Medallion architecture. There are two primary techniques:
 
 ### Type 2 Historization
 
-Type 2 historization stores historical data within the same table by adding additional attributes to track changes over time. This approach is optimal when:
+This method involves storing historical data within the same table by adding time-related attributes. It's optimal when:
 
-- There is a low to medium volume of historical data
-- The main query patterns involve analyzing historical trends and time-series data
-- Main table size can be managed without splitting history
+- The volume of historical data is moderate.
+- Main query patterns involve time-series analysis or tracking historical trends.
+- Managing the size of the main table is feasible without splitting historical data.
 
-For example, an "orders" table could add attributes like "effective_start_date" and "effective_end_date" to enable querying orders for a point in time. New and updated rows will get new date ranges, while old rows remain intact.
+For example, an "orders" table might include "start_date" and "end_date" attributes to facilitate queries for specific time periods, with new and updated rows receiving updated date ranges.
 
 ### Type 4 Historization
 
-Type 4 historization stores current and historical data in separate tables, by creating a dedicated history table snapshot for archival. This approach is better when:
+This approach separates current and historical data into different tables. It's more suitable when:
 
-- There is a high volume of historical data
-- Query patterns mainly access current data
-- Isolating history reduces table sizes for better performance
+- The historical data volume is significant.
+- Queries primarily target current data.
+- Separating historical data improves performance by reducing the main table's size.
 
+Here, the "orders" table would contain only current data, while a separate "orders_history" table would store historical snapshots. This setup necessitates a management process to periodically update the "orders_history" table with new snapshots.
 
-In this case, the "orders" table would retain only current orders. A separate "orders_history" table would store snapshots of past orders. The pipeline managing historization would insert new snapshots into orders_history during update batches.
-
-
-The choice between Type 2 and Type 4 depends on the data volume, query patterns, and complexity of reconstruction. Both approaches allow reproducing past states of data through date-based filtering or joins. Medallion's layered architecture accommodates the right historization model for each dataset's needs.
+The choice between Type 2 and Type 4 historization depends on data volume, query patterns, and the complexity of data reconstruction. Both methods enable the reproduction of past data states, either through date-based filtering or table joins, and are accommodated within Medallion's layered architecture to suit the needs of different datasets.
 
 ## Metadata Management
 
-```mermaid
+Effective metadata management is crucial in the Medallion architecture for facilitating data discovery, governance, and lineage. The architecture leverages various types of metadata:
 
+### Technical Metadata
+
+- Involves dataset and attribute definitions, including table and column level information like names, descriptions, data types, and relationships.
+- Captured and maintained by tools like Unity Catalog, ensuring detailed tracking of data structures.
+
+### Operational Metadata
+
+- Pertains to data processing operations, such as job execution details, performance metrics, and processing histories.
+- Essential for monitoring data pipeline health and efficiency.
+
+### Business Metadata
+
+- Includes business-relevant information like data ownership, usage policies, and domain-specific definitions.
+- Critical for understanding the context and relevance of data within business processes.
+
+These metadata types collectively support a comprehensive Discovery Catalog within the Lakehouse, enabling users to effectively navigate and utilize the data landscape. They also play a key role in impact analysis and governance, ensuring that data usage aligns with organizational standards and regulatory requirements.
+
+```mermaid
 graph TB
 
   TM[Technical Metadata]
@@ -504,12 +344,204 @@ graph TB
   IMP --> GOV[Governance]
 ```
 
-Robust metadata management is critical for data discovery, governance and lineage. Key capabilities provided:
+In summary, the Medallion architecture provides a sophisticated, multi-layered approach to data management within a Lakehouse environment. It emphasizes structured data processing, robust governance, and flexibility to adapt to various data models and formats, ensuring that organizations can effectively harness their data assets for a wide range of analytical and operational purposes.
 
-### Technical Metadata
+## Tagging Using Ontology
 
-- Dataset and attribute definitions
-- Unity Catalog captures table and column level metadata including names, descriptions, comments. Columns have defined data types, precision, scale, nullable status etc. Primary/foreign keys, indices are tracked.
-- Data types, formats, schemas
-- Table and column storage formats (Parquet, ORC, JSON) and serialization schemas are captured by Unity Catalog and stored as Delta Lake properties.
-- Master data
+Tagging using Ontology is a crucial aspect of enhancing data discoverability and management in the Medallion architecture. This process involves classifying and labeling data assets using a structured, hierarchical set of concepts (ontology), making it easier for users to find and understand data. This section fits best after the "Metadata Management" section, as it is an extension of the concept of metadata, focusing specifically on the classification and organization of data assets.
+
+### Ontology-Based Tagging
+
+- **Structured Tagging**: Using a predefined ontology O to tag data assets systematically. This includes categorizing data based on its type, source, content, usage, and other relevant attributes. Formally, an ontology O can be represented as O = (C, R, I), where C is a set of concepts, R is a set of relations between concepts, and I is a set of instances.
+
+- **Semantic Relationships**: Establishing relationships between different data assets based on their tags, facilitating more intuitive data discovery and linkage. These relationships can be formally defined using description logic expressions. For example:
+
+```
+Publication ⊑ ∃publishedBy.Researcher
+```
+
+- **Hierarchical Classification**: Organizing data tags in a hierarchical manner, from general to specific, enabling users to navigate through data layers efficiently. This hierarchy can be represented mathematically as a partially ordered set (poset).
+
+### Implementation in the Medallion Architecture
+
+- **Across Layers**: Implementing tagging in each layer of the Medallion architecture, ensuring that data is consistently classified throughout its lifecycle. Formally, this involves defining ontology mapping functions between layers:
+
+```
+f: O1 → O2
+g: O2 → O3  
+```
+
+- **Integration with Data Cataloging**: Enhancing the Discovery Catalog DC with ontology-based tagging, improving data searchability and governance. This allows semantic queries of the form:
+
+```SPARQL
+SELECT ?data
+WHERE {?data dc:subject o:HealthData}
+```
+
+- **User Interface for Tag Management**: Providing an intuitive interface for data stewards and users to apply, update, and manage tags based on the ontology.
+
+
+### Benefits
+
+- **Enhanced Discoverability**: Easier for users to find relevant data quickly. This can be quantified by improved precision and recall metrics.
+
+- **Consistency in Data Management**: Uniform classification across all data assets. This is ensured mathematically by the ontology mapping functions.
+
+- **Improved Data Governance**: Facilitates adherence to data policies and standards. Reduces manual governance effort through automated tagging.
+
+```mermaid
+graph LR
+  ST[Structured Tagging] --> SR[Semantic Relationships]
+  SR --> HC[Hierarchical Classification]
+  HC --> IL[Integration Across Layers]
+  IL --> IDC[Integration with Data Cataloging]
+  IDC --> UTM[User Tag Management]
+
+```
+
+By integrating ontology-based tagging into the Medallion architecture, organizations can achieve a more organized, searchable, and governable data environment. This approach not only streamlines data management processes but also empowers users to leverage data more effectively for insights and decision-making.
+
+### Refined Layer
+
+The Refined layer is focused on preparing customized datasets for specific applications, users, and consumption scenarios. It involves the final transformations and application of business logic. Key features include:
+
+- Tailored data preparation for business users
+- Data sandboxes for analysts and knowledge workers
+- Data masking for sensitive information protection
+- Cross-system integration for siloed data
+- Advanced data aggregation, roll-ups, and hypercubes
+- Performance optimization through data caching
+- Development of custom views and schemas for different consumer needs
+- Metadata-driven automation and reusability
+
+```mermaid
+graph TB 
+  subgraph Preparation Services  
+  BU[Business User <br/> Tailored Prep]
+  SB[Data Sandboxes for <br/> Analysts]
+  M[Data Masking for <br/> Sensitive Info]
+  I[Integration Across <br/> Siloed Systems]
+  end
+  
+  subgraph Data Delivery
+  A[Aggregations <br/> & Rollups] 
+  H[Hypercubes]
+  C[Performance <br/> Caching]  
+  V[Custom Views <br/> & Schemas]
+  end
+  
+  subgraph Automation
+  MD[Metadata-driven <br/> Automation & Reuse]
+  end
+  
+  BU & SB & M & I & A & H & C & V -.-> MD
+```
+
+## Incremental Data Replication
+
+- Autoloader for efficient incremental data ingestion
+
+```mermaid
+graph TB
+WF[Workflow Scheduling] --> PE[Processing Engine]  
+PE --> IP[Incremental Processing]
+IP --> DO[Dynamic Optimization]    
+IP --> LT[Lineage Tracking]
+LT -.-> EI[Environment Isolation]  
+EI -.-> CD[CI/CD Pipelines]
+CD --> SM[SLA Monitoring]
+```
+
+## Data Pipeline Orchestration
+
+Orchestrating data across Medallion layers involves strategic use of workflow schedulers, distributed processing engines, and DevOps practices:
+
+### Workflow Scheduling
+
+- Utilization of tools like Apache Airflow or similar to define and manage data pipelines
+- Isolation of environments (development, testing, production)
+- Application of CI/CD principles to data management
+- SLA monitoring and alert systems
+- Tracking of data lineage through different stages
+
+### Processing Engines
+
+- Implementation of distributed processing engines like Apache Spark or Apache Flink
+
+### Incremental Processing
+
+Delta Lake supports efficient incremental processing with features like change data capture, snapshot management, and stream processing. This allows for the development of robust, fault-tolerant incremental ETL pipelines that scale effectively with data volume growth. The unified model for batch and streaming data processing enhances flexibility and performance.
+
+In summary, the Medallion architecture presents a comprehensive approach to managing and leveraging data within a modern Lakehouse framework. It emphasizes structured layering, efficient data processing, robust governance, and adaptability to evolving business needs and technologies.
+
+## Data Governance and Security
+
+Within the Medallion architecture, data governance and security are paramount to ensure data integrity, compliance, and controlled access to data across different layers:
+
+### Data Governance
+
+- **Policy Management**: Implementation of comprehensive data policies, including access controls, data retention rules, and compliance with regulatory standards.
+- **Data Lineage**: Tracking the flow of data through the Medallion layers to maintain transparency and auditability.
+- **Data Cataloging**: Utilizing tools like Unity Catalog for metadata management, enabling users to discover and understand data assets efficiently.
+
+### Security Measures
+
+- **Encryption**: Ensuring data at rest and in transit is encrypted, protecting sensitive information across all layers of the architecture.
+- **Authentication and Authorization**: Implementing robust identity and access management systems to control user access to data resources.
+- **Data Masking and Anonymization**: Techniques used in the Refined layer to protect personal and sensitive data, while still allowing for analytical insights.
+
+```mermaid
+graph LR
+  PM[Policy Management] --> DL[Data Lineage]
+  DL --> DC[Data Cataloging]
+  DC --> ENC[Encryption]
+  ENC --> AUTH[Authentication & Authorization]
+  AUTH --> MASK[Data Masking & Anonymization]
+```
+
+## Advanced Analytics and Machine Learning Integration
+
+The Medallion architecture seamlessly integrates advanced analytics and machine learning capabilities, enabling organizations to leverage their data for predictive insights and intelligent decision-making:
+
+### Machine Learning Operations (MLOps)
+
+- **Model Development and Training**: Leveraging the Refined layer for developing and training machine learning models.
+- **Model Deployment and Monitoring**: Efficient deployment of models into production with continuous monitoring for performance and accuracy.
+
+### Analytics Workflows
+
+- **Self-Service BI Tools**: Integration with business intelligence tools for self-service analytics, enabling users to create custom reports and dashboards.
+- **Real-Time Analytics**: Leveraging streaming data capabilities for real-time insights and decision-making.
+
+```mermaid
+graph LR
+  MDT[Model Development & Training] --> MD[Model Deployment]
+  MD --> MM[Model Monitoring]
+  MM --> BI[Self-Service BI Tools]
+  BI --> RTA[Real-Time Analytics]
+```
+
+## Scalability and Performance Optimization
+
+To handle growing data volumes and complex analytics workloads, the Medallion architecture is designed with scalability and performance in mind:
+
+### Scalability
+
+- **Elastic Computing Resources**: Automatic scaling of computational resources to meet workload demands, ensuring efficient data processing.
+- **Distributed Data Processing**: Utilizing technologies like Spark for parallel data processing across clusters.
+
+### Performance Optimization
+
+- **Data Caching**: Implementing caching mechanisms in the Refined layer for faster query performance.
+- **Query Optimization**: Advanced algorithms for optimizing data retrieval and processing tasks.
+
+```mermaid
+graph LR
+  EC[Elastic Computing] --> DP[Distributed Processing]
+  DP --> DC[Data Caching]
+  DC --> QO[Query Optimization]
+```
+
+## Conclusion
+
+The Medallion architecture offers a comprehensive, scalable, and secure framework for modern data management and analytics. By structuring data across distinct layers, it enables organizations to efficiently manage data lifecycles from raw ingestion to advanced analytics. The integration of governance, security, machine learning, and performance optimization ensures that data assets are not only well-managed but also leveraged effectively to drive business insights and innovation. This architecture is adaptable to various industry needs and scales, making it a versatile solution for organizations navigating the complex landscape of big data and analytics.
