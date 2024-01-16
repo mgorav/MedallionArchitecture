@@ -180,7 +180,7 @@ The Intermediate layer is where raw data from the Initial layer is refined into 
 - Development of a business metadata repository and glossary
 
 ```mermaid
-graph TD
+graph LR
 I(Initial Layer) --> C{Intermediate Layer}
 subgraph Functions  
 V[Cleanse & Validate]
